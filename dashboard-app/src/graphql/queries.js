@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 export const GET_DASHBOARD_ITEMS = gql`
-  query GetDashboardItems {
-    dashboardItems {
+  query GetDashboardItems($id: String) {
+    dashboardItems(id: $id) {
       id
       layout
       vizState

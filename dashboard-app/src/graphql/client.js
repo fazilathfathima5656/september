@@ -6,12 +6,18 @@ import { makeExecutableSchema } from 'graphql-tools';
 const cache = new InMemoryCache();
 const defaultDashboardItems = [];
 
-const getDashboardItems = () =>
-  JSON.parse(window.localStorage.getItem('dashboardItems')) ||
+const getDashboardItems = dashboard =>
+  JSON.parse(window.localStorage.getItem( dashboard || 'dashboardItems')) ||
   defaultDashboardItems;
 
-const setDashboardItems = (items) =>
-  window.localStorage.setItem('dashboardItems', JSON.stringify(items));
+const getDashboard = dashboard =>
+  JSON.parse(window.localStorage.getItem( dashboard ));
+
+const setDashboardItems = (items, dashboard) =>
+  window.localStorage.setItem( dashboard, JSON.stringify(items));
+
+// const setDashboard = (items, dashboard) =>
+//   window.localStorage.setItem( dashboard, JSON.stringify(items));
 
 const nextId = () => {
   const currentId =
@@ -21,6 +27,7 @@ const nextId = () => {
 };
 
 const toApolloItem = (i) => ({ ...i, __typename: 'DashboardItem' });
+// const toApolloDashboard = (i) => ({ ...i, __typename: 'Dashboard' });
 
 const typeDefs = `
   type DashboardItem {
@@ -28,6 +35,12 @@ const typeDefs = `
     layout: String
     vizState: String
     name: String
+  }
+
+  type Dashboard {
+    id: String!
+    name: String
+    dashboardItems: [DashboardItem]
   }
 
   input DashboardItemInput {
@@ -51,7 +64,7 @@ const schema = makeExecutableSchema({
   typeDefs,
   resolvers: {
     Query: {
-      dashboardItems() {
+      dashboardItems(id) {
         const dashboardItems = getDashboardItems();
         return dashboardItems.map(toApolloItem);
       },
@@ -60,6 +73,14 @@ const schema = makeExecutableSchema({
         const dashboardItems = getDashboardItems();
         return toApolloItem(dashboardItems.find((i) => i.id.toString() === id));
       },
+
+      // dashboard( d ) {
+      //   const dashboardItems = getDashboardItems( d );
+      //   const savedDashboard = getDashboard( d );
+      //   return  toApolloDashboard(
+      //     { ...savedDashboard, dashboardItems }
+      //   )
+      // }
     },
     Mutation: {
       createDashboardItem: (_, { input: { ...item } }) => {

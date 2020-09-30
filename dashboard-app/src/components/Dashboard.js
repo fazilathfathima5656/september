@@ -7,11 +7,12 @@ import { GET_DASHBOARD_ITEMS } from '../graphql/queries';
 import { UPDATE_DASHBOARD_ITEM } from '../graphql/mutations';
 const ReactGridLayout = WidthProvider(RGL);
 
-const Dashboard = ({ children, dashboardItems }) => {
+const Dashboard = ({ children, dashboardItems, dashboard }) => {
   const [updateDashboardItem] = useMutation(UPDATE_DASHBOARD_ITEM, {
     refetchQueries: [
       {
         query: GET_DASHBOARD_ITEMS,
+        variables: dashboard
       },
     ],
   });

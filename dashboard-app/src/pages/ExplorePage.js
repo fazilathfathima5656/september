@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Button, Spin } from 'antd';
+import { Alert, Select, Spin } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 import ExploreQueryBuilder from '../components/QueryBuilder/ExploreQueryBuilder';
@@ -35,6 +35,11 @@ const ExplorePage = withRouter(({ history, location }) => {
     return <Alert type="error" message={error.toString()} />;
   }
 
+  function handleDropdown( value ) {
+    setTitleModalVisible(true);
+    console.log( value )
+}
+
   return (
     <div>
       <TitleModal
@@ -51,14 +56,30 @@ const ExplorePage = withRouter(({ history, location }) => {
         vizState={finalVizState}
         setVizState={setVizState}
         chartExtra={[
-          <Button
-            key="button"
-            type="primary"
+          <Select
+            placeholder="Select a dashboard"
             loading={addingToDashboard}
-            onClick={() => setTitleModalVisible(true)}
+            setAddingToDashboard={setAddingToDashboard}
+            onChange={ value => handleDropdown( value )}
           >
-            {itemId ? 'Update' : 'xxxxxxxxxxxxxxxxxxx'}
-          </Button>,
+            {/* {
+              items.map(item => {
+                console.log(item);
+                return <Option value={item.name}> {item.name}</Option>
+              })
+              
+            } */}
+            <option value="1">
+              Dashboard1
+            </option>
+              <option value="2">
+              Dashboard2
+            </option>
+
+            <option value="3">
+              Dashboard3
+            </option>
+          </Select>
         ]}
       />
     </div>
