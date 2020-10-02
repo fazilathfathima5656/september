@@ -19,3 +19,12 @@ export const GET_DASHBOARD_ITEM = gql`
     }
   }
 `;
+export const GET_DASHBOARD = gql`
+  query GetDashboardItem($name: String) {
+    dashboardItem(name: $name) {
+      id
+      name
+      dashboardItems
+    }
+  }
+`;

@@ -28,7 +28,7 @@ const Header = ({ location }) => (
       </h2>
 </div>
 
-{/* onclick = () => {
+{/* onClick = () => {
   localStorage.setItem('Dashboard1', 1)
   // localStorage.setItem('user', rememberMe ? user : '');
 }; */}
@@ -44,16 +44,16 @@ const Header = ({ location }) => (
         <Link to="/explore">Explore</Link>
       </Menu.Item>
       <Menu.Item key="/">
-        <Link to="/" onclick={()=>localStorage.setItem("dashboard1", 1)}>Dashboard1</Link>
+        <Link to="/"> Dashboard1 </Link>
       </Menu.Item>
       <Menu.Item key="/1">
-        <Link to="/Dashboard2" onclick={()=>localStorage.setItem("dashboard2", 2)}>Dashboard2</Link>
+        <Link to="/Dashboard2"> Dashboard2 </Link>
       </Menu.Item>
       <Menu.Item key="/2">
-        <Link to="/Dashboard3" onclick={()=>localStorage.setItem("dashboard3", 3)}>Dashboard3</Link>
+        <Link to="/Dashboard3"> Dashboard3 </Link>
       </Menu.Item>
       <Menu.Item key="/3">
-        <Link to="/Dashboard4" onclick={()=>localStorage.setItem("dashboard4", 4)}>Dashboard4</Link>
+        <Link to="/Dashboard4"> Dashboard4 </Link>
       </Menu.Item>
   
     </Menu>

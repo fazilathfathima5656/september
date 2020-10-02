@@ -9,6 +9,15 @@ export const CREATE_DASHBOARD_ITEM = gql`
     }
   }
 `;
+export const CREATE_DASHBOARD = gql`
+  mutation CreateDashboardItem($input: CreateDashboardInput) {
+    createDashboardItem(input: $input) {
+      id
+      name
+      dashboardItems
+    }
+  }
+`;
 export const UPDATE_DASHBOARD_ITEM = gql`
   mutation UpdateDashboardItem($id: String!, $input: DashboardItemInput) {
     updateDashboardItem(id: $id, input: $input) {
@@ -16,6 +25,15 @@ export const UPDATE_DASHBOARD_ITEM = gql`
       layout
       vizState
       name
+    }
+  }
+`;
+export const UPDATE_DASHBOARD = gql`
+  mutation UpdateDashboard($input: UpdateDashboardItem!) {
+    updateDashboardItem(input: $input) {
+      id
+      name
+      dashboardItems
     }
   }
 `;

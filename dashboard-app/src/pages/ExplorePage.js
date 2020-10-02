@@ -62,21 +62,14 @@ const ExplorePage = withRouter(({ history, location }) => {
             setAddingToDashboard={setAddingToDashboard}
             onChange={ value => handleDropdown( value )}
           >
-            {/* {
-              items.map(item => {
-                console.log(item);
-                return <Option value={item.name}> {item.name}</Option>
-              })
-              
-            } */}
-            <option value="1">
+            <option key="1" value="1">
               Dashboard1
             </option>
-              <option value="2">
+              <option key="2" value="2">
               Dashboard2
             </option>
 
-            <option value="3">
+            <option key="3" value="3">
               Dashboard3
             </option>
           </Select>

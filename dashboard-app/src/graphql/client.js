@@ -16,8 +16,8 @@ const getDashboard = dashboard =>
 const setDashboardItems = (items, dashboard) =>
   window.localStorage.setItem( dashboard, JSON.stringify(items));
 
-// const setDashboard = (items, dashboard) =>
-//   window.localStorage.setItem( dashboard, JSON.stringify(items));
+const setDashboard = (items, dashboardName, dashboard ) =>
+  window.localStorage.setItem( dashboardName, JSON.stringify({...dashboard, dashboardItems: items }));
 
 const nextId = () => {
   const currentId =
@@ -27,7 +27,7 @@ const nextId = () => {
 };
 
 const toApolloItem = (i) => ({ ...i, __typename: 'DashboardItem' });
-// const toApolloDashboard = (i) => ({ ...i, __typename: 'Dashboard' });
+const toApolloDashboard = (i) => ({ ...i, __typename: 'Dashboard' });
 
 const typeDefs = `
   type DashboardItem {
@@ -49,13 +49,26 @@ const typeDefs = `
     name: String
   }
 
+  input CreateDashboardInput {
+    name: String!
+  }
+
+  input  UpdateDashboardInput {
+    name: String!
+    id: String!
+    items: [DashboardItemInput]
+  }
+
   type Query {
     dashboardItems: [DashboardItem]
     dashboardItem(id: String!): DashboardItem
+    dashboard: Dashboard
   }
 
   type Mutation {
     createDashboardItem(input: DashboardItemInput): DashboardItem
+    createDashboard(input: CreateDashboardInput): Dashboard
+    updateDashboard(input: UpdateDashboardInput): Dashboard
     updateDashboardItem(id: String!, input: DashboardItemInput): DashboardItem
     deleteDashboardItem(id: String!): DashboardItem
   }
@@ -74,13 +87,21 @@ const schema = makeExecutableSchema({
         return toApolloItem(dashboardItems.find((i) => i.id.toString() === id));
       },
 
-      // dashboard( d ) {
-      //   const dashboardItems = getDashboardItems( d );
-      //   const savedDashboard = getDashboard( d );
-      //   return  toApolloDashboard(
-      //     { ...savedDashboard, dashboardItems }
-      //   )
-      // }
+      dashboard( d ) {
+        const dashboardItems = getDashboardItems( d );
+        let savedDashboard = getDashboard( d );
+        if ( !savedDashboard ) {
+          savedDashboard = {
+            id: nextId(),
+            name: 'initial dashboard',
+            dashboardItems
+          };
+          setDashboard( dashboardItems, savedDashboard.name, savedDashboard )
+        }
+        return  toApolloDashboard(
+          savedDashboard
+        );
+      }
     },
     Mutation: {
       createDashboardItem: (_, { input: { ...item } }) => {
@@ -89,6 +110,21 @@ const schema = makeExecutableSchema({
         dashboardItems.push(item);
         setDashboardItems(dashboardItems);
         return toApolloItem(item);
+      },
+      createDashboard: (_, { input: { name } }) => {
+        const dashboard = {
+          id: nextId(),
+          name,
+          dashboardItems: []
+        };
+
+        setDashboard([], name, dashboard );
+        return toApolloDashboard(dashboard);
+      },
+      updateDashboard: (_, { input: { name, items } }) => {
+        const dashboard = getDashboard( name );
+        dashboard.dashboardItems = [ ...items ];
+        return toApolloDashboard(dashboard);
       },
       updateDashboardItem: (_, { id, input: { ...item } }) => {
         const dashboardItems = getDashboardItems();

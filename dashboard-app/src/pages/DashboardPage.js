@@ -24,11 +24,10 @@ const defaultLayout = (i) => ({
 });
 
 const DashboardPage = ( dashboard ) => {
-  console.log( dashboard );
   const { loading, error, data } = useQuery(GET_DASHBOARD_ITEMS, {
     variables: dashboard
   });
-console.log(data);
+
   if (loading) {
     return <Spin />;
   }
